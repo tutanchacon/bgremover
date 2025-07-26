@@ -2,7 +2,7 @@
 
 ![Python Version](https://img.shields.io/badge/python-3.8+-blue.svg)
 ![License](https://img.shields.io/badge/license-MIT-green.svg)
-![Status](https://img.shields.io/badge/status-Production%20Ready-brightgreen.svg)
+![Status](https://img.shields.io/badge/status-in--development-yellow)
 
 Eliminación profesional de fondo con preservación de elementos usando IA. Después de múltiples pruebas y optimizaciones, hemos desarrollado la **solución óptima con umbral 20** que preserva todos los elementos del personaje.
 
