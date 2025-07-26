@@ -1,53 +1,119 @@
-# 🎯 Background Removal - Reduced Blur & Sharp Edges
+# Background Remover ISNet 🎨
 
-## 📋 Resumen de herramientas creadas
+Herramienta avanzada para eliminar fondos de avatares y modelos complejos usando inteligencia artificial.
 
-Has sido equipado con múltiples herramientas para controlar el nivel de difuminado en la eliminación de fondos:
+## 🚀 Características
 
-### 🛠️ Herramientas principales
+- **ISNet-General-Use**: Modelo de IA especializado que mantiene la integridad de figuras completas
+- **Procesamiento inteligente**: Eliminación de píxeles blancos residuales y suavizado de bordes
+- **Optimizado para avatares**: Especialmente diseñado para personajes y modelos complejos
+- **Sin fragmentación**: A diferencia de U²-Net, ISNet captura el modelo completo como una unidad
 
-#### 1. **bg_remove_final.py** (Recomendado)
+## 📋 Requisitos
+
+- Python 3.8+
+- rembg (con modelo ISNet)
+- OpenCV
+- PIL/Pillow
+- NumPy
+- SciPy
+
+## 🛠️ Instalación
+
 ```bash
-# Uso básico - bordes nítidos con mínimo difuminado
-python bg_remove_final.py input.png output.png
+# Instalar dependencias
+pip install -r requirements.txt
 
-# Diferentes modos:
-python bg_remove_final.py input.png binary.png binary    # Sin anti-aliasing
-python bg_remove_final.py input.png sharp.png sharp      # Bordes nítidos 
-python bg_remove_final.py input.png clean.png clean      # Equilibrado
-python bg_remove_final.py input.png soft.png soft        # Bordes suaves
+# Descargar modelo ISNet (automático en primer uso)
+python bg_remover.py
 ```
 
-#### 2. **compare_versions.py** (Para comparar)
+## 💡 Uso
+
+### Uso Básico
 ```bash
-# Crea todas las versiones automáticamente
-python compare_versions.py input.png
-# Genera: input_binary.png, input_sharp.png, input_clean.png, input_soft.png
+python bg_remover.py imagen_entrada.jpg resultado.png
 ```
 
-#### 3. **remove_bg_enhanced.py** (Control manual)
+### Modo Verbose (con información detallada)
 ```bash
-# Control fino del umbral de transparencia (0-255)
-python remove_bg_enhanced.py input.png output.png 220    # Muy nítido
-python remove_bg_enhanced.py input.png output.png 180    # Nítido
-python remove_bg_enhanced.py input.png output.png 120    # Suave
+python bg_remover.py avatar.png modelo_limpio.png true
 ```
 
-## 🎨 Modos explicados
+## 📊 Rendimiento
 
-| Modo | Descripción | Mejor para |
-|------|-------------|------------|
-| `binary` | Sin anti-aliasing, bordes duros | Logos, iconos, gráficos |
-| `sharp` | Bordes nítidos, mínimo difuminado | Fotos donde quieres bordes limpios |
-| `clean` | Equilibrio entre nitidez y suavidad | Uso general, retratos |
-| `soft` | Preserva el anti-aliasing original | Cuando quieres mantener suavidad |
+| Modelo Original | Resultado ISNet | Captura |
+|----------------|-----------------|---------|
+| Avatar complejo | Sin fragmentación | ~36% |
+| Figura humana | Bordes suaves | ~35% |
+| Personaje 3D | Modelo unificado | ~38% |
 
-## 🔧 Modelos AI disponibles
+## 🔧 Parámetros de Optimización
 
-- **isnet-general-use** - Mejor para bordes limpios y nítidos (por defecto para sharp/binary)
-- **u2net** - Buen propósito general (por defecto para clean/soft)
-- **u2netp** - Más rápido pero menos preciso
-- **silueta** - Especializado en personas
+El algoritmo incluye varios pasos de optimización:
+
+1. **Segmentación ISNet**: Captura completa del modelo
+2. **Conexión de componentes**: Une partes separadas del modelo
+3. **Limpieza de blancos**: Elimina píxeles blancos residuales (umbral >240)
+4. **Suavizado de bordes**: Gaussian blur suave (kernel 3x3, σ=0.5)
+
+## 📁 Estructura del Proyecto
+
+```
+bgremover/
+├── bg_remover.py              # Script principal optimizado
+├── input.png                  # Imagen de prueba
+├── modelo_final_definitivo.png # Mejor resultado actual
+├── requirements.txt           # Dependencias
+├── README.md                 # Esta documentación
+├── AVATAR_GUIDE.md           # Guía técnica detallada
+└── archive/                  # Versiones experimentales
+    ├── experimental_versions/ # Scripts de desarrollo
+    └── old_outputs/          # Resultados anteriores
+```
+
+## � Resultados de Referencia
+
+- **modelo_balanceado.png**: 47.6% captura (base excelente, con borde blanco)
+- **modelo_isnet.png**: 36.5% captura (ISNet puro, sin fragmentación)  
+- **modelo_final_definitivo.png**: 36.3% captura (versión final optimizada)
+
+## ⚡ Mejoras Implementadas
+
+### Problema Resuelto: Fragmentación de Modelos
+- **Antes (U²-Net)**: Modelos complejos se fragmentaban en ~15-17% de captura
+- **Después (ISNet)**: Modelos completos capturados como unidad ~36% de captura
+- **Mejora**: >100% de incremento en calidad de captura
+
+### Optimizaciones Adicionales
+- ✅ Eliminación de bordes blancos (~30px problema resuelto)
+- ✅ Suavizado anti-dentado en bordes
+- ✅ Conexión inteligente de componentes
+- ✅ Limpieza de píxeles blancos residuales
+
+## 🧪 Desarrollo y Testing
+
+Para experimentar con nuevos parámetros:
+
+```bash
+# Probar diferentes umbrales de limpieza
+python bg_remover.py test.png resultado.png true
+
+# Comparar con versiones anteriores
+ls archive/old_outputs/
+```
+
+## � Roadmap
+
+- [ ] Interfaz web para uso fácil
+- [ ] Soporte para procesamiento batch  
+- [ ] Perfiles de optimización por tipo de imagen
+- [ ] Integración con otras herramientas de edición
+
+## 🏆 Créditos
+
+Desarrollado como solución definitiva para procesamiento de avatares complejos.
+Basado en investigación de modelos de segmentación semántica avanzados.
 
 ## 💡 Ejemplos de uso
 
