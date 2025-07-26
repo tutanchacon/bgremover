@@ -1,0 +1,33 @@
+# Background Remover Project - Dependencies
+# Install with: pip install -r requirements.txt
+
+# Core background removal
+rembg[gpu]==2.0.67
+
+# Image processing
+Pillow>=10.0.0
+opencv-python>=4.8.0
+numpy>=1.24.0
+scipy>=1.10.0
+
+# AI/ML Runtime
+onnxruntime>=1.15.0
+# onnxruntime-gpu>=1.15.0  # Uncomment for GPU support
+
+# CLI support
+click>=8.0.0
+
+# File type detection
+filetype>=1.2.0
+
+# File system monitoring (for watch functionality)
+watchdog>=3.0.0
+
+# Optional: Additional image processing
+# scikit-image>=0.20.0
+# imageio>=2.25.0
+
+# Development dependencies (optional)
+# pytest>=7.0.0
+# black>=23.0.0
+# flake8>=6.0.0
