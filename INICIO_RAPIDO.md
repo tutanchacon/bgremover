@@ -3,7 +3,7 @@
 ## ⚡ Comando Único para Usar
 
 ```bash
-python bg_remover_preserve.py input2.png resultado_final.png 20 true
+python bgremover.py input2.png resultado_final.png 20 true
 ```
 
 ## 📋 Pasos Rápidos
@@ -15,7 +15,7 @@ python bg_remover_preserve.py input2.png resultado_final.png 20 true
 
 2. **Procesar tu imagen:**
    ```bash
-   python bg_remover_preserve.py TU_IMAGEN.png salida.png 20 true
+   python bgremover.py TU_IMAGEN.png salida.png 20 true
    ```
 
 3. **¡Listo!** Tu imagen estará en `salida.png`
@@ -29,7 +29,7 @@ python bg_remover_preserve.py input2.png resultado_final.png 20 true
 
 ## 📁 Archivos Importantes
 
-- `bg_remover_preserve.py` → Script principal
+- `bgremover.py` → Script principal
 - `input.png` / `input2.png` → Imágenes de prueba
 - `README.md` → Documentación completa
 

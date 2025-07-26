@@ -5,7 +5,7 @@
 Después de múltiples pruebas y optimizaciones, el **método preserve con umbral 20** ha sido identificado como la solución óptima:
 
 ```bash
-python bg_remover_preserve.py input2.png resultado_final.png 20 true
+python bgremover.py input2.png resultado_final.png 20 true
 ```
 
 ## 🎯 ¿Por qué este método es el mejor?
@@ -43,16 +43,16 @@ pip install -r requirements.txt
 
 ## 🔧 Script Principal
 
-**`bg_remover_preserve.py`** - El único script que necesitas:
+**`bgremover.py`** - El único script que necesitas:
 
 ### Uso básico:
 ```bash
-python bg_remover_preserve.py input.png output.png
+python bgremover.py input.png output.png
 ```
 
 ### Uso avanzado (recomendado):
 ```bash
-python bg_remover_preserve.py input2.png resultado_final.png 20 true
+python bgremover.py input2.png resultado_final.png 20 true
 ```
 
 ### Parámetros:
@@ -65,14 +65,14 @@ python bg_remover_preserve.py input2.png resultado_final.png 20 true
 
 ```
 bgremover/
-├── bg_remover_preserve.py     # ⭐ SCRIPT PRINCIPAL
-├── input.png                  # Imagen de prueba 1
-├── input2.png                 # Imagen de prueba 2
-├── resultado_final.png        # Resultado óptimo generado
-├── README.md                  # Esta documentación
-├── requirements.txt           # Dependencias
-├── archive/                   # Scripts experimentales archivados
-└── venv/                      # Entorno virtual
+├── bgremover.py              # ⭐ SCRIPT PRINCIPAL
+├── input.png                 # Imagen de prueba 1
+├── input2.png                # Imagen de prueba 2
+├── resultado_final.png       # Resultado óptimo generado
+├── README.md                 # Esta documentación
+├── requirements.txt          # Dependencias
+├── archive/                  # Scripts experimentales archivados
+└── venv/                     # Entorno virtual
 ```
 
 ## � Uso Rápido
@@ -85,7 +85,7 @@ cd bgremover
 
 ### 2. Ejecutar script principal:
 ```bash
-python bg_remover_preserve.py input2.png mi_resultado.png 20 true
+python bgremover.py input2.png mi_resultado.png 20 true
 ```
 
 ### 3. Resultado:
@@ -123,7 +123,7 @@ Todos los scripts experimentales están archivados en `archive/` para referencia
 
 **🎯 COMANDO FINAL RECOMENDADO:**
 ```bash
-python bg_remover_preserve.py input2.png resultado_final.png 20 true
+python bgremover.py input2.png resultado_final.png 20 true
 ```
 
 **🎉 Este método garantiza la mejor calidad visual con elementos del personaje completamente sólidos y visibles.**
