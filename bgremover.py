@@ -51,16 +51,16 @@ def remove_background(input_path, output_path, verbose=False):
         with open(input_path, 'rb') as input_file:
             input_data = input_file.read()
 
-        # Proceso con alpha matting para bordes suaves en pelo
+        # Proceso con alpha matting optimizado
         if verbose:
             print("🎯 Aplicando segmentacion con alpha matting...")
         output_data = remove(
             input_data,
             session=session,
             alpha_matting=True,
-            alpha_matting_foreground_threshold=240,
-            alpha_matting_background_threshold=10,
-            alpha_matting_erode_size=10
+            alpha_matting_foreground_threshold=290,
+            alpha_matting_background_threshold=30,
+            alpha_matting_erode_size=3
         )
 
         # Guardo resultado
