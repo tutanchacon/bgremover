@@ -1,26 +1,13 @@
-# Background Remover - Dependencias Esenciales
+# Background Remover - Dependencias
 # Instalación: pip install -r requirements.txt
 
-# Eliminación de fondo con ISNet
+# Motor de eliminación de fondo (incluye BiRefNet)
 rembg>=2.0.67
 
 # Procesamiento de imágenes
 Pillow>=10.0.0
 opencv-python>=4.8.0
 numpy>=1.24.0
-scipy>=1.10.0
-
-# Análisis de colores (para scripts de recuperación)
-scikit-learn>=1.3.0
 
 # Runtime de IA
 onnxruntime>=1.15.0
-
-# Optional: Additional image processing
-# scikit-image>=0.20.0
-# imageio>=2.25.0
-
-# Development dependencies (optional)
-# pytest>=7.0.0
-# black>=23.0.0
-# flake8>=6.0.0
