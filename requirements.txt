@@ -11,3 +11,7 @@ numpy>=1.24.0
 
 # Runtime de IA
 onnxruntime>=1.15.0
+
+# GUI
+customtkinter>=5.2.0
+tkinterdnd2>=0.3.0
