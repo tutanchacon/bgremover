@@ -93,7 +93,7 @@ def remove_background(input_path, output_path, verbose=False, tolerance=30):
         if verbose:
             print("🤖 Paso 1: Segmentando con BiRefNet + alpha matting...")
 
-        session = new_session('birefnet-general')
+        session = new_session('birefnet-portrait')
 
         with open(input_path, 'rb') as f:
             input_data = f.read()
@@ -104,7 +104,7 @@ def remove_background(input_path, output_path, verbose=False, tolerance=30):
             alpha_matting=True,
             alpha_matting_foreground_threshold=240,
             alpha_matting_background_threshold=10,
-            alpha_matting_erode_size=0,
+            alpha_matting_erode_size=1,
         )
         birefnet_img = Image.open(io.BytesIO(birefnet_output)).convert('RGBA')
         birefnet_alpha = np.array(birefnet_img)[:, :, 3]  # canal alpha: 0=fondo, 255=sujeto
@@ -138,6 +138,11 @@ def remove_background(input_path, output_path, verbose=False, tolerance=30):
         # Elimino el fondo blanco exterior que BiRefNet haya dejado pasar
         result[exterior_white, 3] = 0
 
+        # Limpio la neblina residual del pelo: pixels casi transparentes que estén
+        # en zona de fondo exterior son artefactos del matting, no pelo real.
+        # Acoto a exterior_white para no crear hoyos dentro de la silueta.
+        result[(birefnet_alpha < 30) & exterior_white, 3] = 0
+
         # Recupero los pixels de color que BiRefNet no incluyo (decoraciones)
         result[colored_outside_birefnet, 3] = 255
 
@@ -145,7 +150,7 @@ def remove_background(input_path, output_path, verbose=False, tolerance=30):
         # Dilato su mascara 2px para encontrar la franja de transicion con el fondo
         # y aplico alpha proporcional a la fuerza del color, igual que en el pelo.
         deco_border = colored_outside_birefnet.copy()
-        for _ in range(2):
+        for _ in range(4):
             deco_border = (
                 np.roll(deco_border, 1, axis=0) | np.roll(deco_border, -1, axis=0) |
                 np.roll(deco_border, 1, axis=1) | np.roll(deco_border, -1, axis=1)
@@ -156,7 +161,7 @@ def remove_background(input_path, output_path, verbose=False, tolerance=30):
         g_ch = data[:, :, 1].astype(np.int32)
         b_ch = data[:, :, 2].astype(np.int32)
         whiteness = np.minimum(r_ch, np.minimum(g_ch, b_ch))
-        color_strength = np.clip((1.0 - whiteness / 255.0) * 4.0, 0.0, 1.0)
+        color_strength = np.clip((1.0 - whiteness / 255.0) * 2.5, 0.0, 1.0)
         result[deco_border_zone, 3] = (255 * color_strength[deco_border_zone]).astype(np.uint8)
 
         # --- Paso 4: Descontaminacion de color blanco en bordes ---
