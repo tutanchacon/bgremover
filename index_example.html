@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>tutansoft.com</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: #0b0e13;
+      color: #e2e8f0;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* fondo con gradientes suaves */
+    body::before {
+      content: '';
+      position: fixed; inset: 0;
+      background:
+        radial-gradient(ellipse 70% 50% at 20% 20%, rgba(79,142,247,.07) 0%, transparent 60%),
+        radial-gradient(ellipse 60% 40% at 80% 80%, rgba(124,92,246,.06) 0%, transparent 60%);
+      pointer-events: none;
+    }
+
+    /* grid de puntos de fondo */
+    body::after {
+      content: '';
+      position: fixed; inset: 0;
+      background-image: radial-gradient(circle, rgba(255,255,255,.04) 1px, transparent 1px);
+      background-size: 32px 32px;
+      pointer-events: none;
+    }
+
+    .card {
+      position: relative; z-index: 1;
+      text-align: center;
+      padding: 3.5rem 4rem;
+      background: rgba(17, 21, 32, 0.7);
+      border: 1px solid #1e2843;
+      border-radius: 20px;
+      backdrop-filter: blur(16px);
+      max-width: 480px; width: 90%;
+      animation: fadeUp .8s ease both;
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .logo {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 1.05rem; font-weight: 500;
+      color: #4f8ef7;
+      margin-bottom: 2.5rem;
+      display: block;
+    }
+    .logo span { color: #7c5cf6; }
+
+    /* icono animado */
+    .icon {
+      width: 64px; height: 64px;
+      margin: 0 auto 2rem;
+      position: relative;
+    }
+    .icon svg {
+      width: 64px; height: 64px;
+      animation: spin 12s linear infinite;
+    }
+    .icon-center {
+      position: absolute; inset: 0;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .icon-dot {
+      width: 10px; height: 10px; border-radius: 50%;
+      background: linear-gradient(135deg, #4f8ef7, #7c5cf6);
+      box-shadow: 0 0 12px rgba(79,142,247,.6);
+    }
+    @keyframes spin {
+      from { transform: rotate(0deg); }
+      to   { transform: rotate(360deg); }
+    }
+
+    h1 {
+      font-size: 1.9rem; font-weight: 600;
+      letter-spacing: -.02em; line-height: 1.2;
+      margin-bottom: .75rem;
+    }
+    h1 .grad {
+      background: linear-gradient(135deg, #4f8ef7 0%, #7c5cf6 100%);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    p {
+      font-size: .95rem; color: #64748b;
+      line-height: 1.6;
+    }
+
+    .divider {
+      width: 40px; height: 2px;
+      background: linear-gradient(90deg, #4f8ef7, #7c5cf6);
+      border-radius: 99px;
+      margin: 1.75rem auto;
+      opacity: .5;
+    }
+
+    .domain {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: .78rem; color: #1e2843;
+      background: #161c2d;
+      border: 1px solid #1e2843;
+      border-radius: 99px;
+      padding: .35rem 1rem;
+      display: inline-block;
+      margin-top: 2rem;
+      letter-spacing: .05em;
+      color: #4f6894;
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <span class="logo">tutan<span>soft</span>.com</span>
+
+    <!-- icono de engranaje girando -->
+    <div class="icon">
+      <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="32" cy="32" r="30" stroke="#1e2843" stroke-width="1.5" stroke-dasharray="4 4"/>
+        <path d="M32 8 L34 14 L38 12 L38 18 L44 18 L42 22 L48 24 L44 28 L48 32 L44 36 L48 40 L42 42 L44 46 L38 46 L38 52 L34 50 L32 56 L30 50 L26 52 L26 46 L20 46 L22 42 L16 40 L20 36 L16 32 L20 28 L16 24 L22 22 L20 18 L26 18 L26 12 L30 14 Z"
+          stroke="url(#g)" stroke-width="1.5" stroke-linejoin="round" fill="none" opacity=".4"/>
+        <defs>
+          <linearGradient id="g" x1="16" y1="8" x2="48" y2="56" gradientUnits="userSpaceOnUse">
+            <stop stop-color="#4f8ef7"/>
+            <stop offset="1" stop-color="#7c5cf6"/>
+          </linearGradient>
+        </defs>
+      </svg>
+      <div class="icon-center"><div class="icon-dot"></div></div>
+    </div>
+
+    <h1>Under<br /><span class="grad">construction</span></h1>
+
+    <div class="divider"></div>
+
+    <p>Something is being built here.<br />Check back soon.</p>
+
+    <div class="domain">tutansoft.com</div>
+  </div>
+</body>
+</html>

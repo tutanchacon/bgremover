@@ -15,7 +15,7 @@ from tkinterdnd2 import TkinterDnD
 import customtkinter as ctk
 
 from processing import ProcessingEngine
-from widgets import BatchTab, SettingsPanel, SingleTab
+from widgets import AboutDialog, BatchTab, SettingsPanel, SingleTab
 
 ctk.set_appearance_mode("dark")
 ctk.set_default_color_theme("blue")
@@ -39,7 +39,7 @@ class BGRemoverApp(ctk.CTk, TkinterDnD.DnDWrapper):
     # ── Construcción ──────────────────────────────────────────────────────────
 
     def _build_window(self) -> None:
-        self.title("BGRemover — BiRefNet")
+        self.title("ClearCut")
         self.geometry("1120x720")
         self.resizable(False, False)
         self.grid_columnconfigure(1, weight=1)
@@ -60,8 +60,10 @@ class BGRemoverApp(ctk.CTk, TkinterDnD.DnDWrapper):
         self._build_tabs(main)
 
     def _build_header(self, parent: ctk.CTkFrame) -> None:
+        parent.grid_columnconfigure(0, weight=1)
+
         ctk.CTkLabel(
-            parent, text="BGRemover",
+            parent, text="✂  ClearCut",
             font=ctk.CTkFont(size=20, weight="bold"),
         ).grid(row=0, column=0, pady=(12, 0))
 
@@ -71,6 +73,16 @@ class BGRemoverApp(ctk.CTk, TkinterDnD.DnDWrapper):
             font=ctk.CTkFont(size=11),
             text_color="gray",
         ).grid(row=0, column=0, sticky="s", pady=(0, 2))
+
+        ctk.CTkButton(
+            parent, text="ⓘ  Acerca de",
+            command=lambda: AboutDialog(self),
+            width=110, height=26,
+            fg_color="transparent",
+            hover_color=("gray85", "gray25"),
+            text_color="gray",
+            font=ctk.CTkFont(size=11),
+        ).grid(row=0, column=0, sticky="ne", padx=8, pady=(8, 0))
 
     def _build_tabs(self, parent: ctk.CTkFrame) -> None:
         tabview = ctk.CTkTabview(parent)

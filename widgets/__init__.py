@@ -5,9 +5,10 @@ from .tooltip import Tooltip, HelpIcon
 from .settings import SettingsPanel
 from .single_tab import SingleTab
 from .batch_tab import BatchTab
+from .about_dialog import AboutDialog
 
 __all__ = [
     "PreviewPanel", "CollapsibleFrame", "LabeledSlider",
     "Tooltip", "HelpIcon", "SettingsPanel",
-    "SingleTab", "BatchTab",
+    "SingleTab", "BatchTab", "AboutDialog",
 ]

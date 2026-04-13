@@ -10,7 +10,8 @@
       "Bash(PYTHONIOENCODING=utf-8 \"D:/wamp64/www/bgremover/venv/Scripts/python.exe\" -c:*)",
       "Bash(venv/Scripts/python -c ':*)",
       "Bash(venv/Scripts/pyinstaller bgremover.spec)",
-      "Bash(powershell:*)"
+      "Bash(powershell:*)",
+      "Bash(venv/Scripts/pyinstaller --noconfirm bgremover.spec)"
     ]
   }
 }

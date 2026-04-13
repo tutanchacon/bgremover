@@ -1,0 +1,33 @@
+ClearCut — Software de eliminación de fondos
+Copyright (c) 2026 Marco Chacon (tutansoft.com)
+
+LICENCIA DE USO GRATUITO — SOFTWARE PROPIETARIO
+
+Se otorga permiso gratuito para usar este software en entornos personales
+y comerciales, sujeto a las siguientes condiciones:
+
+1. USO PERMITIDO
+   Este software puede ser usado libremente por cualquier persona u
+   organización, sin costo y sin límite de uso.
+
+2. RESTRICCIONES
+   Queda expresamente prohibido, sin autorización escrita del autor:
+   a) Redistribuir, vender o sublicenciar el software o cualquier parte de él.
+   b) Modificar, descompilar, desensamblar o realizar ingeniería inversa.
+   c) Publicar el software en tiendas, repositorios o plataformas de terceros.
+   d) Eliminar o alterar los avisos de copyright y autoría.
+
+3. PROPIEDAD INTELECTUAL
+   El software, incluyendo su código fuente, diseño y documentación, es
+   propiedad exclusiva de Marco Chacon. Todos los derechos reservados.
+
+4. SIN GARANTÍAS
+   Este software se provee "tal cual", sin garantía de ningún tipo, expresa
+   o implícita. El autor no se responsabiliza por daños directos, indirectos
+   o incidentales derivados del uso del software.
+
+5. CONTACTO
+   Para consultas sobre licenciamiento o permisos adicionales:
+   https://www.tutansoft.com
+   https://github.com/tutanchacon
+
