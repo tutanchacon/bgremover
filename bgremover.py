@@ -87,17 +87,25 @@ def remove_background(input_path, output_path, verbose=False, tolerance=30):
             return False
 
         # --- Paso 1: BiRefNet define la silueta principal ---
-        # Uso birefnet-general sin alpha matting porque su mascara nativa ya es
-        # de alta calidad y el matting con erosion eliminaba detalles finos.
+        # Reactivo alpha matting pero con erode_size=0 para refinar los bordes del pelo
+        # sin comerse los detalles finos. El erode_size=3 anterior era el culpable de
+        # perder manos y decoraciones. El foreground_threshold=290 estaba fuera de rango.
         if verbose:
-            print("🤖 Paso 1: Segmentando con BiRefNet...")
+            print("🤖 Paso 1: Segmentando con BiRefNet + alpha matting...")
 
         session = new_session('birefnet-general')
 
         with open(input_path, 'rb') as f:
             input_data = f.read()
 
-        birefnet_output = remove(input_data, session=session, alpha_matting=False)
+        birefnet_output = remove(
+            input_data,
+            session=session,
+            alpha_matting=True,
+            alpha_matting_foreground_threshold=240,
+            alpha_matting_background_threshold=10,
+            alpha_matting_erode_size=0,
+        )
         birefnet_img = Image.open(io.BytesIO(birefnet_output)).convert('RGBA')
         birefnet_alpha = np.array(birefnet_img)[:, :, 3]  # canal alpha: 0=fondo, 255=sujeto
 
@@ -132,6 +140,39 @@ def remove_background(input_path, output_path, verbose=False, tolerance=30):
 
         # Recupero los pixels de color que BiRefNet no incluyo (decoraciones)
         result[colored_outside_birefnet, 3] = 255
+
+        # Suavizo el borde exterior de los elementos decorativos recuperados.
+        # Dilato su mascara 2px para encontrar la franja de transicion con el fondo
+        # y aplico alpha proporcional a la fuerza del color, igual que en el pelo.
+        deco_border = colored_outside_birefnet.copy()
+        for _ in range(2):
+            deco_border = (
+                np.roll(deco_border, 1, axis=0) | np.roll(deco_border, -1, axis=0) |
+                np.roll(deco_border, 1, axis=1) | np.roll(deco_border, -1, axis=1)
+            )
+        deco_border_zone = deco_border & ~colored_outside_birefnet & exterior_white
+
+        r_ch = data[:, :, 0].astype(np.int32)
+        g_ch = data[:, :, 1].astype(np.int32)
+        b_ch = data[:, :, 2].astype(np.int32)
+        whiteness = np.minimum(r_ch, np.minimum(g_ch, b_ch))
+        color_strength = np.clip((1.0 - whiteness / 255.0) * 4.0, 0.0, 1.0)
+        result[deco_border_zone, 3] = (255 * color_strength[deco_border_zone]).astype(np.uint8)
+
+        # --- Paso 4: Descontaminacion de color blanco en bordes ---
+        # Los pixels semitransparentes del borde mezclan el color real con el
+        # blanco del fondo original. Calculo el color verdadero deshaciendo esa mezcla:
+        # Si observed = a * F + (1-a) * 255, entonces F = (observed - 255) / a + 255
+        if verbose:
+            print("🧹 Paso 4: Descontaminando halo blanco en bordes...")
+
+        semi_mask = (result[:, :, 3] > 20) & (result[:, :, 3] < 235)
+        if semi_mask.any():
+            a = result[semi_mask, 3].astype(np.float32) / 255.0
+            for c in range(3):
+                observed = result[semi_mask, c].astype(np.float32)
+                true_color = (observed - 255.0) / a + 255.0
+                result[semi_mask, c] = np.clip(true_color, 0, 255).astype(np.uint8)
 
         Image.fromarray(result).save(output_path, 'PNG')
 
