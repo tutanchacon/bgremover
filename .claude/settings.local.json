@@ -7,7 +7,10 @@
       "Bash(\"D:/wamp64/www/bgremover/venv/Scripts/python.exe\" \"D:/wamp64/www/bgremover/bgremover.py\" \"D:/wamp64/www/bgremover/input.png\" \"D:/wamp64/www/bgremover/salida.png\" 20 true)",
       "Bash(\"D:/wamp64/www/bgremover/venv/Scripts/pip.exe\" install:*)",
       "Bash(PYTHONIOENCODING=utf-8 \"D:/wamp64/www/bgremover/venv/Scripts/python.exe\":*)",
-      "Bash(PYTHONIOENCODING=utf-8 \"D:/wamp64/www/bgremover/venv/Scripts/python.exe\" -c:*)"
+      "Bash(PYTHONIOENCODING=utf-8 \"D:/wamp64/www/bgremover/venv/Scripts/python.exe\" -c:*)",
+      "Bash(venv/Scripts/python -c ':*)",
+      "Bash(venv/Scripts/pyinstaller bgremover.spec)",
+      "Bash(powershell:*)"
     ]
   }
 }
