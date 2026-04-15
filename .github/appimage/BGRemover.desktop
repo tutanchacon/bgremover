@@ -1,0 +1,9 @@
+[Desktop Entry]
+Name=BGRemover
+Comment=Elimina el fondo de imágenes con IA (BiRefNet)
+Exec=BGRemover
+Icon=BGRemover
+Type=Application
+Categories=Graphics;RasterGraphics;
+Terminal=false
+StartupNotify=true

@@ -1,0 +1,9 @@
+#!/bin/bash
+# Punto de entrada del AppImage.
+#
+# AppImage monta el filesystem en $APPDIR antes de ejecutar este script.
+# PyInstaller ya resuelve _internal/ relativo al ejecutable, así que
+# no necesito manipular LD_LIBRARY_PATH — solo delego la ejecución.
+
+APPDIR="$(dirname "$(readlink -f "$0")")"
+exec "$APPDIR/usr/bin/BGRemover" "$@"
