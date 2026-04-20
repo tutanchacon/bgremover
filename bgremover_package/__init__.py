@@ -1,10 +1,24 @@
 """
-bgremover_package — interfaz pública del removedor de fondos.
+BGRemover Package - Professional Background Removal Library
+===========================================================
 
-Exporto BackgroundRemover como único punto de entrada para que los módulos
-consumidores no dependan de la estructura interna del paquete.
+A Python package for professional background removal with element preservation.
+
+Usage:
+    from bgremover_package import BackgroundRemover
+    
+    remover = BackgroundRemover()
+    result = remover.remove_background('input.jpg', 'output.png')
+
+CLI Usage:
+    bgremover input.jpg output.png --threshold 20 --verbose
 """
 
-from .core import BackgroundRemover
+__version__ = "1.0.0"
+__author__ = "Tu Nombre"
+__email__ = "tu.email@ejemplo.com"
 
-__all__ = ['BackgroundRemover']
+from .core import BackgroundRemover
+from .utils import validate_image, get_supported_formats
+
+__all__ = ['BackgroundRemover', 'validate_image', 'get_supported_formats']
