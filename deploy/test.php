@@ -19,9 +19,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     } else {
         $threshold = max(0, min(255, (int)($_POST['threshold'] ?? 20)));
 
+        $token = trim($_POST['token'] ?? '');
+
         $ch = curl_init(API_URL);
+        $headers = [];
+        if ($token !== '') {
+            $headers[] = 'Authorization: Bearer ' . $token;
+        }
         curl_setopt_array($ch, [
             CURLOPT_POST           => true,
+            CURLOPT_HTTPHEADER     => $headers,
             CURLOPT_POSTFIELDS     => [
                 'image'     => new CURLFile($file['tmp_name'], $file['type'], $file['name']),
                 'threshold' => $threshold,
@@ -80,6 +87,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   <h1>BGRemover — prueba de API</h1>
 
   <form method="post" enctype="multipart/form-data">
+    <label for="token">API Token</label>
+    <input type="password" id="token" name="token" placeholder="Dejar vacío si no hay token" style="width:100%;margin-bottom:1rem;padding:.45rem .6rem;border-radius:6px;border:1px solid #333;background:#111;color:#eee;">
+
     <label for="image">Imagen (JPG / PNG / WEBP, máx <?= MAX_SIZE_MB ?> MB)</label>
     <input type="file" id="image" name="image" accept="image/*" required>
 

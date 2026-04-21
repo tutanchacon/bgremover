@@ -17,6 +17,7 @@ ExecStart={{APP_DIR}}/.venv/bin/gunicorn wsgi:app \
 
 # Modelo configurable sin tocar el código.
 Environment=BGREMOVER_MODEL={{APP_MODEL}}
+Environment=BGREMOVER_API_TOKEN={{APP_TOKEN}}
 # Caché de rembg — persiste los .onnx descargados entre reinicios.
 Environment=HOME=/var/lib/{{APP_USER}}
 

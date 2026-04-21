@@ -30,6 +30,11 @@ class BGRemoverError(Exception):
             self.status_code = status_code
 
 
+class AuthenticationError(BGRemoverError):
+    """Raised when the request lacks a valid API token."""
+    status_code = 401
+
+
 class ValidationError(BGRemoverError):
     """Raised when request input does not meet requirements."""
     status_code = 400
@@ -52,7 +57,10 @@ def register_error_handlers(app: Flask) -> None:
 
     @app.errorhandler(BGRemoverError)
     def handle_domain_error(error: BGRemoverError):
-        return jsonify({"error": error.message}), error.status_code
+        response = jsonify({"error": error.message})
+        if error.status_code == 401:
+            response.headers["WWW-Authenticate"] = 'Bearer realm="bgremover"'
+        return response, error.status_code
 
     @app.errorhandler(413)
     def handle_payload_too_large(_err):

@@ -27,12 +27,18 @@ POST /api/v1/remove-bg
 """
 
 import io
+import os
+import secrets
 
 from flask import Blueprint, jsonify, request, send_file
 
-from .errors import ValidationError
+from .errors import AuthenticationError, ValidationError
 from .interfaces import IImageValidator, IProcessorService, ProcessingOptions
 from .processors import AVAILABLE_MODELS, DEFAULT_MODEL
+
+# Token leído una vez al arrancar. Si la variable no está definida, la API
+# queda abierta — útil en desarrollo local, nunca en producción.
+_API_TOKEN: str | None = os.environ.get("BGREMOVER_API_TOKEN")
 
 _THRESHOLD_MIN = 0
 _THRESHOLD_MAX = 255
@@ -48,6 +54,21 @@ def create_blueprint(
     Returns a Blueprint ready to be registered on any Flask app.
     """
     bp = Blueprint("api", __name__, url_prefix="/api/v1")
+
+    # ------------------------------------------------------------------
+    # Autenticación — se ejecuta antes de cada request al blueprint,
+    # excepto en /health que debe ser accesible para monitoreo sin token.
+    # ------------------------------------------------------------------
+
+    @bp.before_request
+    def require_token():
+        if _API_TOKEN is None:
+            return  # sin token configurado, acceso libre
+        if request.endpoint == "api.health":
+            return  # health check siempre público
+        token = _extract_token(request)
+        if not secrets.compare_digest(token, _API_TOKEN):
+            raise AuthenticationError("Token inválido o ausente.")
 
     # ------------------------------------------------------------------
     # GET /api/v1/health
@@ -112,6 +133,20 @@ def create_blueprint(
 # ---------------------------------------------------------------------------
 # Private helpers
 # ---------------------------------------------------------------------------
+
+def _extract_token(req) -> str:
+    """
+    Acepta el token en dos formas para compatibilidad con clientes distintos:
+      Authorization: Bearer <token>
+      X-API-Key: <token>
+    Devuelve cadena vacía si no viene ninguno, para que compare_digest
+    no falle y siempre rechace en tiempo constante.
+    """
+    auth = req.headers.get("Authorization", "")
+    if auth.startswith("Bearer "):
+        return auth[7:]
+    return req.headers.get("X-API-Key", "")
+
 
 def _parse_threshold(value) -> int:
     """Parse threshold from request form data, clamping to valid range."""

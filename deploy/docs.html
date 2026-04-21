@@ -1,0 +1,262 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>BGRemover API — Documentación</title>
+<style>
+  :root {
+    --bg: #0f0f1a; --surface: #1a1a2e; --border: #2d2d4e;
+    --accent: #7c6af7; --accent2: #a78bfa;
+    --text: #e2e2f0; --muted: #8888aa; --green: #34d399; --red: #f87171; --yellow: #fbbf24;
+    --code-bg: #0d0d1f;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--bg); color: var(--text); font-family: system-ui, sans-serif; line-height: 1.6; }
+  a { color: var(--accent2); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+
+  .layout { display: flex; min-height: 100vh; }
+  nav { width: 220px; min-width: 220px; background: var(--surface); border-right: 1px solid var(--border);
+        padding: 2rem 1rem; position: sticky; top: 0; height: 100vh; overflow-y: auto; }
+  nav h2 { font-size: .7rem; text-transform: uppercase; letter-spacing: .1em; color: var(--muted); margin-bottom: .75rem; }
+  nav ul { list-style: none; margin-bottom: 1.5rem; }
+  nav ul li a { display: block; padding: .3rem .5rem; border-radius: 6px; font-size: .875rem; color: var(--text); }
+  nav ul li a:hover { background: var(--border); text-decoration: none; }
+
+  main { flex: 1; max-width: 860px; padding: 3rem 2rem; }
+  h1 { font-size: 1.75rem; margin-bottom: .25rem; }
+  .subtitle { color: var(--muted); margin-bottom: 2.5rem; }
+  h2 { font-size: 1.1rem; margin: 2.5rem 0 1rem; padding-bottom: .4rem; border-bottom: 1px solid var(--border); }
+  h3 { font-size: .95rem; margin: 1.5rem 0 .5rem; color: var(--accent2); }
+  p  { margin-bottom: .75rem; color: #c0c0d8; }
+
+  .endpoint { background: var(--surface); border: 1px solid var(--border); border-radius: 10px;
+              padding: 1.25rem 1.5rem; margin-bottom: 1.5rem; }
+  .method-line { display: flex; align-items: center; gap: .75rem; margin-bottom: .75rem; }
+  .badge { font-size: .75rem; font-weight: 700; padding: .2rem .55rem; border-radius: 5px; font-family: monospace; }
+  .get  { background: #064e3b; color: var(--green); }
+  .post { background: #1e3a5f; color: #93c5fd; }
+  .path { font-family: monospace; font-size: .95rem; color: var(--text); }
+  .desc { color: var(--muted); font-size: .875rem; }
+
+  table { width: 100%; border-collapse: collapse; font-size: .875rem; margin: .75rem 0 1rem; }
+  th { text-align: left; padding: .5rem .75rem; color: var(--muted); font-weight: 600;
+       border-bottom: 1px solid var(--border); }
+  td { padding: .5rem .75rem; border-bottom: 1px solid var(--border); vertical-align: top; }
+  td code { background: var(--code-bg); padding: .1rem .35rem; border-radius: 4px; font-size: .82rem; color: var(--accent2); }
+  .req { color: var(--red); font-size: .75rem; font-weight: 600; }
+  .opt { color: var(--muted); font-size: .75rem; }
+
+  pre { background: var(--code-bg); border: 1px solid var(--border); border-radius: 8px;
+        padding: 1rem 1.25rem; overflow-x: auto; font-size: .82rem; line-height: 1.7; margin: .5rem 0 1rem; }
+  code { font-family: 'Fira Code', 'Cascadia Code', monospace; }
+  .c-key   { color: #93c5fd; }
+  .c-str   { color: #86efac; }
+  .c-num   { color: var(--yellow); }
+  .c-cmt   { color: var(--muted); font-style: italic; }
+  .c-url   { color: var(--accent2); }
+
+  .alert { padding: .75rem 1rem; border-radius: 8px; font-size: .875rem; margin-bottom: 1rem; }
+  .alert-warn  { background: #2d2000; border-left: 3px solid var(--yellow); color: #fde68a; }
+  .alert-info  { background: #0d1f3c; border-left: 3px solid #60a5fa; color: #bfdbfe; }
+  .alert-ok    { background: #052e16; border-left: 3px solid var(--green); color: #bbf7d0; }
+
+  .resp-table td:first-child { font-family: monospace; color: var(--yellow); width: 60px; }
+
+  @media (max-width: 640px) {
+    nav { display: none; }
+    main { padding: 1.5rem 1rem; }
+  }
+</style>
+</head>
+<body>
+<div class="layout">
+
+<nav>
+  <h2>BGRemover API</h2>
+  <ul>
+    <li><a href="#intro">Introducción</a></li>
+    <li><a href="#auth">Autenticación</a></li>
+    <li><a href="#endpoints">Endpoints</a></li>
+    <li><a href="#health">GET /health</a></li>
+    <li><a href="#models">GET /models</a></li>
+    <li><a href="#remove-bg">POST /remove-bg</a></li>
+    <li><a href="#errors">Errores</a></li>
+    <li><a href="#examples">Ejemplos</a></li>
+  </ul>
+  <h2>Links</h2>
+  <ul>
+    <li><a href="/test.php">Página de prueba</a></li>
+    <li><a href="/api/v1/health">Health check</a></li>
+    <li><a href="/api/v1/models">Modelos</a></li>
+  </ul>
+</nav>
+
+<main>
+  <h1>BGRemover API</h1>
+  <p class="subtitle">Eliminación de fondo con IA — REST API v1</p>
+
+  <!-- INTRO -->
+  <h2 id="intro">Introducción</h2>
+  <p>La API recibe una imagen, elimina el fondo usando modelos de segmentación semántica (rembg) y devuelve un PNG con transparencia.</p>
+  <p>Base URL: <code>https://bgremover.tutansoft.com/api/v1</code></p>
+
+  <!-- AUTH -->
+  <h2 id="auth">Autenticación</h2>
+  <p>Todos los endpoints excepto <code>/health</code> requieren un token de API. Enviarlo en uno de estos headers:</p>
+  <pre><code><span class="c-key">Authorization:</span> <span class="c-str">Bearer TU_TOKEN_AQUI</span>
+<span class="c-cmt"># o bien</span>
+<span class="c-key">X-API-Key:</span> <span class="c-str">TU_TOKEN_AQUI</span></code></pre>
+  <div class="alert alert-warn">
+    Sin token configurado en el servidor la API es pública. En producción siempre definir <code>BGREMOVER_API_TOKEN</code> en el servicio systemd.
+  </div>
+
+  <!-- ENDPOINTS -->
+  <h2 id="endpoints">Endpoints</h2>
+
+  <!-- HEALTH -->
+  <div class="endpoint" id="health">
+    <div class="method-line">
+      <span class="badge get">GET</span>
+      <span class="path">/api/v1/health</span>
+    </div>
+    <p class="desc">Liveness probe. No requiere autenticación. Útil para monitoreo externo.</p>
+
+    <h3>Respuesta 200</h3>
+    <pre><code>{
+  <span class="c-key">"status"</span>:  <span class="c-str">"ok"</span>,
+  <span class="c-key">"service"</span>: <span class="c-str">"bgremover"</span>
+}</code></pre>
+  </div>
+
+  <!-- MODELS -->
+  <div class="endpoint" id="models">
+    <div class="method-line">
+      <span class="badge get">GET</span>
+      <span class="path">/api/v1/models</span>
+    </div>
+    <p class="desc">Lista los modelos de IA disponibles. Requiere autenticación.</p>
+
+    <h3>Respuesta 200</h3>
+    <pre><code>{
+  <span class="c-key">"default"</span>: <span class="c-str">"isnet-general-use"</span>,
+  <span class="c-key">"models"</span>: [
+    { <span class="c-key">"id"</span>: <span class="c-str">"isnet-general-use"</span>, <span class="c-key">"description"</span>: <span class="c-str">"ISNet — best general-purpose quality (default)"</span> },
+    { <span class="c-key">"id"</span>: <span class="c-str">"u2net"</span>,            <span class="c-key">"description"</span>: <span class="c-str">"U²Net — fast, good quality"</span> },
+    { <span class="c-key">"id"</span>: <span class="c-str">"u2netp"</span>,           <span class="c-key">"description"</span>: <span class="c-str">"U²Net-p — lightweight, lower accuracy"</span> },
+    { <span class="c-key">"id"</span>: <span class="c-str">"silueta"</span>,          <span class="c-key">"description"</span>: <span class="c-str">"Silueta — optimised for portraits / people"</span> }
+  ]
+}</code></pre>
+  </div>
+
+  <!-- REMOVE-BG -->
+  <div class="endpoint" id="remove-bg">
+    <div class="method-line">
+      <span class="badge post">POST</span>
+      <span class="path">/api/v1/remove-bg</span>
+    </div>
+    <p class="desc">Procesa una imagen y devuelve el PNG sin fondo como descarga. Requiere autenticación.</p>
+    <p>Content-Type del request: <code>multipart/form-data</code></p>
+
+    <h3>Parámetros</h3>
+    <table>
+      <tr>
+        <th>Campo</th><th>Tipo</th><th>Requerido</th><th>Descripción</th>
+      </tr>
+      <tr>
+        <td><code>image</code></td>
+        <td>file</td>
+        <td><span class="req">SÍ</span></td>
+        <td>Imagen a procesar. Formatos aceptados: JPG, PNG, WEBP, BMP. Tamaño máximo: 20 MB.</td>
+      </tr>
+      <tr>
+        <td><code>threshold</code></td>
+        <td>int</td>
+        <td><span class="opt">no</span></td>
+        <td>Umbral de alpha para limpiar artefactos semitransparentes. Rango 0–255. Default: <code>20</code>. Valores más altos = bordes más agresivos.</td>
+      </tr>
+    </table>
+
+    <h3>Respuesta exitosa (200)</h3>
+    <p>Devuelve el archivo PNG directamente como <code>application/octet-stream</code> con header <code>Content-Disposition: attachment</code>.</p>
+    <div class="alert alert-info">
+      El nombre del archivo descargado es el original con sufijo <code>_no_bg.png</code>. Ej: <code>foto.jpg</code> → <code>foto_no_bg.png</code>.
+    </div>
+  </div>
+
+  <!-- ERRORS -->
+  <h2 id="errors">Códigos de error</h2>
+  <table class="resp-table">
+    <tr><th>Código</th><th>Causa</th></tr>
+    <tr><td>400</td><td>Imagen ausente, formato no soportado o archivo corrupto.</td></tr>
+    <tr><td>401</td><td>Token ausente o inválido.</td></tr>
+    <tr><td>413</td><td>Imagen supera el límite de 20 MB configurado en nginx.</td></tr>
+    <tr><td>422</td><td>La imagen es válida pero el modelo no pudo procesarla.</td></tr>
+    <tr><td>500</td><td>Error interno del servidor.</td></tr>
+  </table>
+  <p style="margin-top:.75rem">Todos los errores devuelven JSON:</p>
+  <pre><code>{ <span class="c-key">"error"</span>: <span class="c-str">"descripción del error"</span> }</code></pre>
+
+  <!-- EXAMPLES -->
+  <h2 id="examples">Ejemplos</h2>
+
+  <h3>curl</h3>
+  <pre><code><span class="c-cmt"># Quitar fondo con threshold por defecto</span>
+curl -X POST https://bgremover.tutansoft.com/api/v1/remove-bg \
+     -H <span class="c-str">"Authorization: Bearer TU_TOKEN"</span> \
+     -F <span class="c-str">"image=@foto.jpg"</span> \
+     --output sin_fondo.png
+
+<span class="c-cmt"># Con threshold personalizado</span>
+curl -X POST https://bgremover.tutansoft.com/api/v1/remove-bg \
+     -H <span class="c-str">"X-API-Key: TU_TOKEN"</span> \
+     -F <span class="c-str">"image=@foto.jpg"</span> \
+     -F <span class="c-str">"threshold=40"</span> \
+     --output sin_fondo.png</code></pre>
+
+  <h3>PHP</h3>
+  <pre><code>$ch = curl_init(<span class="c-str">'https://bgremover.tutansoft.com/api/v1/remove-bg'</span>);
+curl_setopt_array($ch, [
+    CURLOPT_POST           => true,
+    CURLOPT_HTTPHEADER     => [<span class="c-str">'Authorization: Bearer TU_TOKEN'</span>],
+    CURLOPT_POSTFIELDS     => [
+        <span class="c-str">'image'</span>     => new CURLFile(<span class="c-str">'/ruta/foto.jpg'</span>),
+        <span class="c-str">'threshold'</span> => <span class="c-num">20</span>,
+    ],
+    CURLOPT_RETURNTRANSFER => true,
+    CURLOPT_TIMEOUT        => <span class="c-num">120</span>,
+]);
+$png = curl_exec($ch);</code></pre>
+
+  <h3>Python</h3>
+  <pre><code>import requests
+
+with open(<span class="c-str">"foto.jpg"</span>, <span class="c-str">"rb"</span>) as f:
+    response = requests.post(
+        <span class="c-str">"https://bgremover.tutansoft.com/api/v1/remove-bg"</span>,
+        headers={<span class="c-str">"Authorization"</span>: <span class="c-str">"Bearer TU_TOKEN"</span>},
+        files={<span class="c-str">"image"</span>: f},
+        data={<span class="c-str">"threshold"</span>: <span class="c-num">20</span>},
+        timeout=<span class="c-num">120</span>,
+    )
+
+with open(<span class="c-str">"sin_fondo.png"</span>, <span class="c-str">"wb"</span>) as out:
+    out.write(response.content)</code></pre>
+
+  <h3>JavaScript (fetch)</h3>
+  <pre><code>const form = new FormData();
+form.append(<span class="c-str">'image'</span>, fileInput.files[<span class="c-num">0</span>]);
+form.append(<span class="c-str">'threshold'</span>, <span class="c-str">'20'</span>);
+
+const res = await fetch(<span class="c-str">'https://bgremover.tutansoft.com/api/v1/remove-bg'</span>, {
+  method: <span class="c-str">'POST'</span>,
+  headers: { <span class="c-str">'Authorization'</span>: <span class="c-str">'Bearer TU_TOKEN'</span> },
+  body: form,
+});
+const blob = await res.blob();
+const url  = URL.createObjectURL(blob); <span class="c-cmt">// usar como src de &lt;img&gt;</span></code></pre>
+</main>
+</div>
+</body>
+</html>
