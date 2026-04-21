@@ -1,0 +1,13 @@
+# Dependencias mínimas para correr solo el servidor HTTP en VPS Linux.
+# Excluye scikit-learn y scipy que solo usa el tooling local de análisis.
+# opencv-python-headless reemplaza opencv-python — sin dependencias de display (X11).
+
+rembg>=2.0.67
+onnxruntime>=1.15.0
+
+Pillow>=10.0.0
+opencv-python-headless>=4.8.0
+numpy>=1.24.0
+
+flask>=3.0.0
+waitress>=3.0.0

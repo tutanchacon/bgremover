@@ -1,0 +1,33 @@
+[Unit]
+Description=BGRemover API Server
+After=network.target
+
+[Service]
+Type=simple
+User={{APP_USER}}
+Group={{APP_USER}}
+WorkingDirectory={{APP_DIR}}
+
+ExecStart={{APP_DIR}}/.venv/bin/gunicorn wsgi:app \
+    --bind 127.0.0.1:{{APP_PORT}} \
+    --workers {{APP_WORKERS}} \
+    --timeout 120 \
+    --access-logfile - \
+    --error-logfile -
+
+# Modelo configurable sin tocar el código.
+Environment=BGREMOVER_MODEL={{APP_MODEL}}
+# Caché de rembg — persiste los .onnx descargados entre reinicios.
+Environment=HOME=/var/lib/{{APP_USER}}
+
+# --timeout 120 porque la inferencia de ISNet en CPU puede tardar hasta 30 s.
+# Gunicorn mata workers que no respondan en ese tiempo — subir si hay imágenes grandes.
+
+Restart=always
+RestartSec=5
+LimitNOFILE=65536
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=multi-user.target
